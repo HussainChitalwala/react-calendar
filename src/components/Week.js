@@ -9,12 +9,12 @@ const generateDays = (date, month) => {
   let days = [];
   for (let i = 0; i < 7; i++) {
     let day = {
-      date,
-      name: date.format('dd').substring(0, 1),
-      number: date.date(),
-      isCurrentMonth: date.month() === month.month(),
-      isToday: date.isSame(new Date(), 'day'),
-      uniqueKey: date.format(),
+        date,
+        name: date.format('dd').substring(0, 1),
+        number: date.date(),
+        isCurrentMonth: date.month() === month.month(),
+        isToday: date.isSame(new Date(), 'day'),
+        uniqueKey: date.format(),
     };
 
     days.push(day);
@@ -26,9 +26,21 @@ const generateDays = (date, month) => {
 };
 
 export default (props) => {
-  return (
-    <div>
+    const {date, month, selected, select, stocks} = props;
+    const days = generateDays(date, month);
 
+    return (
+    <div className = {styles.week}>
+        {
+            days.map((day) => {
+                let earningsCallForTheDay;
+                if (stocks.length) {
+                    earningsCallForTheDay = stocksTimingFilter(stocks, day.date, 'day');
+                }
+
+                return <Day day = {day} selected = {selected} select = {select} stocks = {earningsCallForTheDay}/>;
+            })
+        }
     </div>
   );
 }
